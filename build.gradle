@@ -1,0 +1,65 @@
+	buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.serenity-bdd:serenity-gradle-plugin:2.0.80"
+        //classpath "gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:1.7"
+       // classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1"
+        
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+//apply plugin: "com.github.sherter.google-java-format"
+
+
+
+configurations {
+    unitTestCompile.extendsFrom testCompile
+    unitTestRuntime.extendsFrom testRuntime
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile         group: 'org.assertj',       name: 'assertj-core',        version: '3.13.2'
+//compile 'com.google.googlejavaformat:google-java-format:1.7'
+
+    testCompile     group: 'org.slf4j',         name: 'slf4j-simple',        version: '2.0.0-alpha0'
+    testCompile     group: 'junit',             name: 'junit',               version: '4.12'
+    testCompile     group: 'org.hamcrest',      name: 'hamcrest-all',        version: '1.3'
+    compile         group: 'net.serenity-bdd',  name: 'serenity-core',       version: '2.0.80'
+    compile         group: 'net.serenity-bdd',  name: 'serenity-junit',      version: '2.0.80'
+    compile         group: 'net.serenity-bdd',  name: 'serenity-cucumber',   version: '1.9.45'
+    compile 		group: 'io.percy', 			name: 'percy-java-selenium', version: '0.1.0'
+    
+}
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
+
+
+test {
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
+
+
+gradle.startParameter.continueOnFailure = true
+
+
+tasks.withType(Test) {
+    systemProperties = System.properties
+}
